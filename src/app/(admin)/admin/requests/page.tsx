@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { adminAPI } from '@/lib/api';
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AdminRequestsPage() {
+function AdminRequestsContent() {
   const searchParams = useSearchParams();
   const [requests, setRequests] = useState<Request[]>([]);
   const [allRequests, setAllRequests] = useState<Request[]>([]);
@@ -70,12 +70,12 @@ export default function AdminRequestsPage() {
   );
 
   const statusCounts = {
-    all: requests.length,
-    pending: requests.filter(r => r.status === 'pending').length,
-    assigned: requests.filter(r => r.status === 'assigned').length,
-    in_progress: requests.filter(r => r.status === 'in_progress').length,
-    completed: requests.filter(r => r.status === 'completed').length,
-    cancelled: requests.filter(r => r.status === 'cancelled').length,
+    all: allRequests.length,
+    pending: allRequests.filter(r => r.status === 'pending').length,
+    assigned: allRequests.filter(r => r.status === 'assigned').length,
+    in_progress: allRequests.filter(r => r.status === 'in_progress').length,
+    completed: allRequests.filter(r => r.status === 'completed').length,
+    cancelled: allRequests.filter(r => r.status === 'cancelled').length,
   };
 
   return (
@@ -220,5 +220,19 @@ export default function AdminRequestsPage() {
         )}
       </div>
     </DashboardLayout>
+  );
+}
+
+export default function AdminRequestsPage() {
+  return (
+    <Suspense fallback={
+      <DashboardLayout>
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </DashboardLayout>
+    }>
+      <AdminRequestsContent />
+    </Suspense>
   );
 }
