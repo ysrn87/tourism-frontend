@@ -11,17 +11,17 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user) {
-      // Redirect based on role
-      if (user.role === 'admin') {
-        router.push('/admin/dashboard');
-      } else if (user.role === 'agent') {
-        router.push('/agent/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+  if (!loading && user) {
+    // Redirect based on role
+    if (user.role === 'admin') {
+      router.push('/admin/dashboard');
+    } else if (user.role === 'tour_guide') {  // Changed from 'agent'
+      router.push('/tour-guide/dashboard');
+    } else {
+      router.push('/dashboard');
     }
-  }, [user, loading, router]);
+  }
+}, [user, loading, router]);
 
   if (loading) {
     return (

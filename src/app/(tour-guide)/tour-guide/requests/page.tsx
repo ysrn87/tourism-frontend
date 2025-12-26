@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import { agentAPI } from '@/lib/api';
+import { tourGuideAPI } from '@/lib/api';
 import { Request } from '@/types';
 import { 
   FileText, 
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AgentRequestsPage() {
+export default function tourGuideRequestsPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [allRequests, setAllRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,12 +30,12 @@ export default function AgentRequestsPage() {
     try {
       setLoading(true);
       // Always fetch all requests for accurate counts
-      const allResponse = await agentAPI.getRequests({});
+      const allResponse = await tourGuideAPI.getRequests({});
       setAllRequests(allResponse.data.requests || allResponse.data);
       
       // Fetch filtered requests for display
       const params = statusFilter !== 'all' ? { status: statusFilter } : {};
-      const response = await agentAPI.getRequests(params);
+      const response = await tourGuideAPI.getRequests(params);
       setRequests(response.data.requests || response.data);
     } catch (error) {
       console.error('Failed to fetch requests:', error);
@@ -210,7 +210,7 @@ export default function AgentRequestsPage() {
                 </div>
 
                 {/* Action Button */}
-                <Link href={`/agent/requests/${request.id}`}>
+                <Link href={`/tour-guide/requests/${request.id}`}>
                   <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
                     <Eye size={18} />
                     View & Manage Request

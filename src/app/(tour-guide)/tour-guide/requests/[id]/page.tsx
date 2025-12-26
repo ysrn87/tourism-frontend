@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import Button from '@/components/common/Button';
-import { agentAPI } from '@/lib/api';
+import { tourGuideAPI } from '@/lib/api';
 import { Request } from '@/types';
 import { 
   ArrowLeft,
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AgentRequestDetailPage() {
+export default function TourGuideRequestDetailPage() {
   const params = useParams();
   const router = useRouter();
   const requestId = Number(params.id);
@@ -38,12 +38,12 @@ export default function AgentRequestDetailPage() {
 
   const fetchRequest = async () => {
     try {
-      const response = await agentAPI.getRequestById(requestId);
+      const response = await tourGuideAPI.getRequestById(requestId);
       setRequest(response.data);
     } catch (error) {
       console.error('Failed to fetch request:', error);
       alert('Request not found');
-      router.push('/agent/requests');
+      router.push('/tour-guide/requests');
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ export default function AgentRequestDetailPage() {
 
     setUpdating(true);
     try {
-      await agentAPI.updateStatus(requestId, { 
+      await tourGuideAPI.updateStatus(requestId, { 
         status: newStatus,
         note: note.trim() || undefined
       });
@@ -134,7 +134,7 @@ export default function AgentRequestDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <Link 
-            href="/agent/requests" 
+            href="/tour-guide/requests" 
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft size={20} />

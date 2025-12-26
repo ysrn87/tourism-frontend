@@ -35,17 +35,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Dynamic navigation based on user role
   const getNavigation = () => {
-    if (user?.role === 'agent') {
+    if (user?.role === 'tour_guide') {
       return [
-        { name: 'Dashboard', href: '/agent/dashboard', icon: LayoutDashboard },
-        { name: 'Assigned Requests', href: '/agent/requests', icon: FileText },
+        { name: 'Dashboard', href: '/tour-guide/dashboard', icon: LayoutDashboard },
+        { name: 'Assigned Requests', href: '/tour-guide/requests', icon: FileText },
       ];
     }
     if (user?.role === 'admin') {
       return [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
         { name: 'Requests', href: '/admin/requests', icon: FileText },
-        { name: 'Agents', href: '/admin/agents', icon: User },
+        { name: 'Tour Guides', href: '/admin/tour-guides', icon: User },
       ];
     }
     // Default for regular users

@@ -5,8 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import StatsCard from '@/components/dashboard/StatsCard';
-import { agentAPI } from '@/lib/api';
-import { AgentStats, Request } from '@/types';
+import { tourGuideAPI } from '@/lib/api';
+import { TourGuideStats, Request } from '@/types';
 import { 
   FileText, 
   Clock, 
@@ -17,24 +17,24 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AgentDashboard() {
+export default function TourGuideDashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [stats, setStats] = useState<AgentStats | null>(null);
+  const [stats, setStats] = useState<TourGuideStats | null>(null);
   const [recentRequests, setRecentRequests] = useState<Request[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
-    } else if (user && user.role !== 'agent') {
+    } else if (user && user.role !== 'tour_guide') {
       if (user.role === 'admin') router.push('/admin/dashboard');
       if (user.role === 'user') router.push('/dashboard');
     }
   }, [user, loading, router]);
 
   useEffect(() => {
-    if (user && user.role === 'agent') {
+    if (user && user.role === 'tour_guide') {
       fetchData();
     }
   }, [user]);
@@ -42,8 +42,8 @@ export default function AgentDashboard() {
   const fetchData = async () => {
     try {
       const [statsRes, requestsRes] = await Promise.all([
-        agentAPI.getStats(),
-        agentAPI.getRequests({ limit: 5 })
+        tourGuideAPI.getStats(),
+        tourGuideAPI.getRequests({ limit: 5 })
       ]);
 
       setStats(statsRes.data);
@@ -84,7 +84,7 @@ export default function AgentDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Agent Dashboard
+            Tour Guide Dashboard
           </h1>
           <p className="text-gray-600">
             Welcome back, {user?.name}! Manage your assigned travel requests.
@@ -145,7 +145,7 @@ export default function AgentDashboard() {
               Recent Assignments
             </h2>
             <Link 
-              href="/agent/requests" 
+              href="/tour-guide/requests" 
               className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1"
             >
               View All
@@ -168,7 +168,7 @@ export default function AgentDashboard() {
               {recentRequests.map((request) => (
                 <Link
                   key={request.id}
-                  href={`/agent/requests/${request.id}`}
+                  href={`/tour-guide/requests/${request.id}`}
                   className="block px-6 py-4 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
@@ -205,7 +205,7 @@ export default function AgentDashboard() {
         {/* Tips Section */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-blue-900 mb-3">
-            Agent Tips
+            Tour Guide Tips
           </h3>
           <ul className="text-sm text-blue-800 space-y-2">
             <li>• Respond to new assignments within 24 hours for best customer satisfaction</li>

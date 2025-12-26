@@ -25,14 +25,14 @@ export default function UserDashboard() {
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    } else if (user && user.role !== 'user') {
-      // Redirect if not a regular user
-      if (user.role === 'admin') router.push('/admin/dashboard');
-      if (user.role === 'agent') router.push('/agent/dashboard');
-    }
-  }, [user, loading, router]);
+  if (!loading && !user) {
+    router.push('/login');
+  } else if (user && user.role !== 'user') {
+    // Redirect if not a regular user
+    if (user.role === 'admin') router.push('/admin/dashboard');
+    if (user.role === 'tour_guide') router.push('/tour-guide/dashboard');  // Changed
+  }
+}, [user, loading, router]);
 
   useEffect(() => {
     if (user) {
@@ -182,9 +182,9 @@ export default function UserDashboard() {
                         <span>
                           {new Date(request.created_at).toLocaleDateString()}
                         </span>
-                        {request.agent_name && (
+                        {request.tour_guide_name && (
                           <span className="flex items-center gap-1">
-                            Agent: <span className="font-medium">{request.agent_name}</span>
+                            Agent: <span className="font-medium">{request.tour_guide_name}</span>
                           </span>
                         )}
                       </div>

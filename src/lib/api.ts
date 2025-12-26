@@ -70,37 +70,37 @@ export const userAPI = {
     api.get('/user/requests/stats'),
 };
 
-// Agent API
-export const agentAPI = {
+// Tour Guide API
+export const tourGuideAPI = {
   getRequests: (params?: { page?: number; limit?: number; status?: string }) =>
-    api.get('/agent/requests', { params }),
+    api.get('/tour-guide/requests', { params }),
   
   getRequestById: (id: number) =>
-    api.get(`/agent/requests/${id}`),
+    api.get(`/tour-guide/requests/${id}`),
   
   updateStatus: (id: number, data: { status: string; note?: string }) =>
-    api.post(`/agent/requests/${id}/status`, data),
+    api.post(`/tour-guide/requests/${id}/status`, data),
   
   getStats: () =>
-    api.get('/agent/requests/stats'),
+    api.get('/tour-guide/requests/stats'),
   
   getActivity: (id: number) =>
-    api.get(`/agent/requests/${id}/activity`),
+    api.get(`/tour-guide/requests/${id}/activity`),
 };
 
 // Admin API
 export const adminAPI = {
-  registerAgent: (data: { name: string; email: string; phone: string; password: string }) =>
-    api.post('/admin/register/agent', data),
+  registerTourGuide: (data: { name: string; email: string; phone: string; password: string }) =>
+    api.post('/admin/register/tour-guide', data),
   
-  getAgents: (params?: { page?: number; limit?: number }) =>
-    api.get('/admin/agents', { params }),
+  getTourGuides: (params?: { page?: number; limit?: number }) =>
+    api.get('/admin/tour-guides', { params }),
   
-  getAgentById: (id: number) =>
-    api.get(`/admin/agents/${id}`),
+  getTourGuideById: (id: number) =>
+    api.get(`/admin/tour-guides/${id}`),
   
-  toggleAgentActive: (id: number) =>
-    api.patch(`/admin/agents/${id}/toggle-active`),
+  toggleTourGuideActive: (id: number) =>
+    api.patch(`/admin/tour-guides/${id}/toggle-active`),
   
   getRequests: (params?: { page?: number; limit?: number; status?: string; destination?: string }) =>
     api.get('/admin/requests', { params }),
@@ -108,11 +108,11 @@ export const adminAPI = {
   getRequestById: (id: number) =>
     api.get(`/admin/requests/${id}`),
   
-  assignRequest: (id: number, agentId: number) =>
-    api.post(`/admin/requests/${id}/assign`, { agentId }),
+  assignRequest: (id: number, tourGuideId: number) =>
+    api.post(`/admin/requests/${id}/assign`, { tourGuideId }),
   
-  reassignRequest: (id: number, agentId: number) =>
-    api.post(`/admin/requests/${id}/reassign`, { agentId }),
+  reassignRequest: (id: number, tourGuideId: number) =>
+    api.post(`/admin/requests/${id}/reassign`, { tourGuideId }),
   
   getDashboardStats: () =>
     api.get('/admin/dashboard/stats'),

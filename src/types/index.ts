@@ -4,7 +4,7 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
-  role: 'user' | 'agent' | 'admin';
+  role: 'user' | 'tour_guide' | 'admin';
   active?: boolean;
   created_at?: string;
   updated_at?: string;
@@ -17,15 +17,15 @@ export interface Request {
   destination: string;
   message?: string;
   status: 'pending' | 'assigned' | 'in_progress' | 'completed' | 'cancelled';
-  agent_id?: number;
+  tour_guide_id?: number;
   created_at: string;
   updated_at: string;
   user_name?: string;
   user_email?: string;
   user_phone?: string;
-  agent_name?: string;
-  agent_email?: string;
-  agent_phone?: string;
+  tour_guide_name?: string;
+  tour_guide_email?: string;
+  tour_guide_phone?: string;
 }
 
 // Activity log types
@@ -85,7 +85,7 @@ export interface UserStats {
   cancelled: number;
 }
 
-export interface AgentStats {
+export interface TourGuideStats {
   total: number;
   assigned: number;
   in_progress: number;
@@ -100,12 +100,12 @@ export interface AdminStats {
   completed_requests: number;
   cancelled_requests: number;
   total_users: number;
-  total_agents: number;
-  active_agents: number;
+  total_tour_guides: number;
+  active_tour_guides: number;
 }
 
-// Agent with workload
-export interface AgentWithWorkload extends User {
+// Tour Guide with workload
+export interface TourGuideWithWorkload extends User {
   total_requests: number;
   active_requests: number;
   completed_requests: number;

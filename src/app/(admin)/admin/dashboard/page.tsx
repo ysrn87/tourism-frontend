@@ -29,7 +29,7 @@ export default function AdminDashboard() {
     if (!loading && !user) {
       router.push('/login');
     } else if (user && user.role !== 'admin') {
-      if (user.role === 'agent') router.push('/agent/dashboard');
+      if (user.role === 'tour_guide') router.push('/tour-guide/dashboard');
       if (user.role === 'user') router.push('/dashboard');
     }
   }, [user, loading, router]);
@@ -91,14 +91,14 @@ export default function AdminDashboard() {
             color="purple"
           />
           <StatsCard
-            title="Total Agents"
-            value={stats?.total_agents || 0}
+            title="Total Tour Guides"
+            value={stats?.total_tour_guides || 0}
             icon={UserCheck}
             color="green"
           />
           <StatsCard
-            title="Active Agents"
-            value={stats?.active_agents || 0}
+            title="Active Tour Guides"
+            value={stats?.active_tour_guides || 0}
             icon={Activity}
             color="yellow"
           />
@@ -180,7 +180,7 @@ export default function AdminDashboard() {
                   <span className="font-semibold">Quick Stats</span>
                 </div>
                 <ul className="text-sm text-green-100 space-y-1">
-                  <li>• {stats?.active_agents || 0} of {stats?.total_agents || 0} agents active</li>
+                  <li>• {stats?.active_tour_guides || 0} of {stats?.total_tour_guides || 0} tour guides active</li>
                   <li>• {stats?.pending_requests || 0} requests need assignment</li>
                   <li>• {(stats?.assigned_requests || 0) + (stats?.in_progress_requests || 0)} requests in progress</li>
                 </ul>
@@ -203,24 +203,24 @@ export default function AdminDashboard() {
                 Pending Requests
               </h3>
               <p className="text-sm text-gray-600">
-                Needs agent assignment
+                Needs tour guide assignment
               </p>
             </div>
           </Link>
 
-          <Link href="/admin/agents">
+          <Link href="/admin/tour-guides">
             <div className="bg-white rounded-lg shadow-sm border-2 border-blue-200 hover:border-blue-400 p-6 transition-colors cursor-pointer">
               <div className="flex items-center justify-between mb-3">
                 <Users className="text-blue-600" size={32} />
                 <span className="text-3xl font-bold text-blue-600">
-                  {stats?.total_agents || 0}
+                  {stats?.total_tour_guides || 0}
                 </span>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                Manage Agents
+                Manage Tour Guides
               </h3>
               <p className="text-sm text-gray-600">
-                View and manage all agents
+                View and manage all tour guides
               </p>
             </div>
           </Link>
@@ -249,11 +249,11 @@ export default function AdminDashboard() {
             Admin Dashboard Tips
           </h3>
           <ul className="text-sm text-blue-800 space-y-2">
-            <li>• Assign pending requests to available agents promptly</li>
-            <li>• Monitor agent workload to ensure balanced distribution</li>
+            <li>• Assign pending requests to available tour guides promptly</li>
+            <li>• Monitor tour guide workload to ensure balanced distribution</li>
             <li>• Check completion rates to identify system bottlenecks</li>
             <li>• Review cancelled requests for improvement opportunities</li>
-            <li>• Ensure active agents are sufficient for current demand</li>
+            <li>• Ensure active tour guides are sufficient for current demand</li>
           </ul>
         </div>
       </div>
