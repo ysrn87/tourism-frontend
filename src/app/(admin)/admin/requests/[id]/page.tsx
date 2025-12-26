@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import Button from '@/components/common/Button';
 import { adminAPI } from '@/lib/api';
-import { Request, AgentWithWorkload } from '@/types';
+import { Request, TourGuideWithWorkload } from '@/types';
 import { 
   ArrowLeft, MapPin, Calendar, User, Mail, Phone, MessageSquare, 
   Clock, UserCheck, RefreshCw
@@ -18,10 +18,10 @@ export default function AdminRequestDetailPage() {
   const requestId = Number(params.id);
 
   const [request, setRequest] = useState<Request | null>(null);
-  const [agents, setAgents] = useState<AgentWithWorkload[]>([]);
+  const [tourGuides, setTourGuides] = useState<TourGuideWithWorkload[]>([]);
   const [loading, setLoading] = useState(true);
   const [assigning, setAssigning] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState<number | null>(null);
+  const [selectedTourGuide, setSelectedTourGuide] = useState<number | null>(null);
 
   useEffect(() => {
     if (requestId) {
@@ -31,12 +31,12 @@ export default function AdminRequestDetailPage() {
 
   const fetchData = async () => {
     try {
-      const [requestRes, agentsRes] = await Promise.all([
+      const [requestRes, tourGuidesRes] = await Promise.all([
         adminAPI.getRequestById(requestId),
-        adminAPI.getAgents()
+        adminAPI.getTourGuides()
       ]);
       setRequest(requestRes.data.request || requestRes.data);
-      setAgents(agentsRes.data.agents || agentsRes.data);
+      setTourGuides(tourGuidesRes.data.tourGuides || tourGuidesRes.data);
     } catch (error) {
       console.error('Failed to fetch data:', error);
       alert('Request not found');
@@ -47,18 +47,18 @@ export default function AdminRequestDetailPage() {
   };
 
   const handleAssign = async () => {
-    if (!selectedAgent) {
-      alert('Please select an agent');
+    if (!selectedTourGuide) {
+      alert('Please select a tour guide');
       return;
     }
 
     setAssigning(true);
     try {
-      if (request?.agent_id) {
-        await adminAPI.reassignRequest(requestId, selectedAgent);
+      if (request?.tour_guide_id) {
+        await adminAPI.reassignRequest(requestId, selectedTourGuide);
         alert('Request reassigned successfully!');
       } else {
-        await adminAPI.assignRequest(requestId, selectedAgent);
+        await adminAPI.assignRequest(requestId, selectedTourGuide);
         alert('Request assigned successfully!');
       }
       fetchData();
@@ -106,7 +106,7 @@ export default function AdminRequestDetailPage() {
     );
   }
 
-  const activeAgents = agents.filter(a => a.active);
+  const activeTourGuides = tourGuides.filter(a => a.active);
 
   return (
     <DashboardLayout>
@@ -220,52 +220,52 @@ export default function AdminRequestDetailPage() {
           </div>
         </div>
 
-        {/* Agent Assignment Section */}
+        {/* Tour Guide Assignment Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              {request.agent_id ? 'Reassign Agent' : 'Assign Agent'}
+              {request.tour_guide_id ? 'Reassign Tour Guide' : 'Assign Tour Guide'}
             </h2>
-            {request.agent_id && (
+            {request.tour_guide_id && (
               <span className="flex items-center gap-2 text-sm text-blue-600">
                 <RefreshCw size={16} />
-                Currently: {request.agent_name}
+                Currently: {request.tour_guide_name}
               </span>
             )}
           </div>
 
-          {activeAgents.length === 0 ? (
+          {activeTourGuides.length === 0 ? (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-              <p className="text-yellow-800">No active agents available</p>
+              <p className="text-yellow-800">No active tour guides available</p>
             </div>
           ) : (
             <>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Agent
+                  Select Tour Guide
                 </label>
                 <select
-                  value={selectedAgent || ''}
-                  onChange={(e) => setSelectedAgent(Number(e.target.value))}
+                  value={selectedTourGuide || ''}
+                  onChange={(e) => setSelectedTourGuide(Number(e.target.value))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 >
-                  <option value="">Choose an agent...</option>
-                  {activeAgents.map((agent) => (
-                    <option key={agent.id} value={agent.id}>
-                      {agent.name} - {agent.active_requests} active requests
+                  <option value="">Choose an TourGuide...</option>
+                  {activeTourGuides.map((tourGuide) => (
+                    <option key={tourGuide.id} value={tourGuide.id}>
+                      {tourGuide.name} - {tourGuide.active_requests} active requests
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Agent Cards */}
+              {/* Tour Guide Cards */}
               <div className="grid md:grid-cols-2 gap-4 mb-4">
-                {activeAgents.map((agent) => (
+                {activeTourGuides.map((tourGuide) => (
                   <div
-                    key={agent.id}
-                    onClick={() => setSelectedAgent(agent.id)}
+                    key={tourGuide.id}
+                    onClick={() => setSelectedTourGuide(tourGuide.id)}
                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                      selectedAgent === agent.id
+                      selectedTourGuide === tourGuide.id
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-blue-300'
                     }`}
@@ -275,21 +275,21 @@ export default function AdminRequestDetailPage() {
                         <UserCheck className="text-blue-600" size={20} />
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">{agent.name}</p>
-                        <p className="text-xs text-gray-500">{agent.email}</p>
+                        <p className="font-semibold text-gray-900">{tourGuide.name}</p>
+                        <p className="text-xs text-gray-500">{tourGuide.email}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-xs text-center">
                       <div className="bg-gray-100 rounded p-2">
-                        <p className="font-bold text-gray-900">{agent.total_requests}</p>
+                        <p className="font-bold text-gray-900">{tourGuide.total_requests}</p>
                         <p className="text-gray-600">Total</p>
                       </div>
                       <div className="bg-yellow-100 rounded p-2">
-                        <p className="font-bold text-yellow-700">{agent.active_requests}</p>
+                        <p className="font-bold text-yellow-700">{tourGuide.active_requests}</p>
                         <p className="text-yellow-600">Active</p>
                       </div>
                       <div className="bg-green-100 rounded p-2">
-                        <p className="font-bold text-green-700">{agent.completed_requests}</p>
+                        <p className="font-bold text-green-700">{tourGuide.completed_requests}</p>
                         <p className="text-green-600">Done</p>
                       </div>
                     </div>
@@ -300,9 +300,9 @@ export default function AdminRequestDetailPage() {
               <Button
                 onClick={handleAssign}
                 isLoading={assigning}
-                disabled={!selectedAgent}
+                disabled={!selectedTourGuide}
               >
-                {request.agent_id ? 'Reassign to Selected Agent' : 'Assign to Selected Agent'}
+                {request.tour_guide_id ? 'Reassign to Selected Tour Guide' : 'Assign to Selected Tour Guide'}
               </Button>
             </>
           )}
@@ -314,8 +314,8 @@ export default function AdminRequestDetailPage() {
             Assignment Tips
           </h3>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Distribute requests evenly among agents</li>
-            <li>• Consider agent expertise for specific destinations</li>
+            <li>• Distribute requests evenly among tour guides</li>
+            <li>• Consider tour guide expertise for specific destinations</li>
             <li>• Check active workload before assignment</li>
             <li>• Pending requests should be assigned within 24 hours</li>
           </ul>
