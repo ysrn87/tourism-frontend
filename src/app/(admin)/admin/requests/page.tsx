@@ -65,7 +65,7 @@ function AdminRequestsContent() {
   const filteredRequests = requests.filter(request =>
     request.destination.toLowerCase().includes(searchQuery.toLowerCase()) ||
     request.user_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    request.agent_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    request.tour_guide_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     request.message?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -100,7 +100,7 @@ function AdminRequestsContent() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   type="text"
-                  placeholder="Search by destination, customer, agent, or message..."
+                  placeholder="Search by destination, customer, tour guide, or message..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -180,16 +180,16 @@ function AdminRequestsContent() {
                         <span className="font-medium">Customer:</span>
                         <span>{request.user_name}</span>
                       </div>
-                      {request.agent_name ? (
+                      {request.tour_guide_name ? (
                         <div className="flex items-center gap-2 text-sm text-gray-700">
                           <UserCheck size={16} className="text-blue-600" />
-                          <span className="font-medium">Agent:</span>
-                          <span>{request.agent_name}</span>
+                          <span className="font-medium">Tour Guide:</span>
+                          <span>{request.tour_guide_name}</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <UserCheck size={16} className="text-gray-400" />
-                          <span>No agent assigned</span>
+                          <span>No tour guide assigned</span>
                         </div>
                       )}
                     </div>

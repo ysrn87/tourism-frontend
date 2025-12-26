@@ -184,7 +184,7 @@ export default function UserDashboard() {
                         </span>
                         {request.tour_guide_name && (
                           <span className="flex items-center gap-1">
-                            Agent: <span className="font-medium">{request.tour_guide_name}</span>
+                            Tour Guide: <span className="font-medium">{request.tour_guide_name}</span>
                           </span>
                         )}
                       </div>

@@ -200,9 +200,9 @@ export default function RequestsListPage() {
                       <span>
                         Created: {new Date(request.created_at).toLocaleDateString()}
                       </span>
-                      {request.agent_name && (
+                      {request.tour_guide_name && (
                         <span className="flex items-center gap-1">
-                          Agent: <span className="font-medium text-gray-700">{request.agent_name}</span>
+                          Tour Guide: <span className="font-medium text-gray-700">{request.tour_guide_name}</span>
                         </span>
                       )}
                       {request.updated_at && request.updated_at !== request.created_at && (

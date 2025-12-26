@@ -106,7 +106,7 @@ export default function NewRequestPage() {
               Request Created Successfully!
             </h2>
             <p className="text-gray-600 mb-4">
-              Your travel request has been submitted. An agent will be assigned to help you soon.
+              Your travel request has been submitted. A tour guide will be assigned to help you soon.
             </p>
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
           </div>
@@ -131,7 +131,7 @@ export default function NewRequestPage() {
             Create Travel Request
           </h1>
           <p className="text-gray-600">
-            Tell us where you want to go and we'll connect you with an expert agent.
+            Tell us where you want to go and we'll connect you with an expert tour guide.
           </p>
         </div>
 
@@ -234,8 +234,8 @@ export default function NewRequestPage() {
           </h3>
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• Your request will be reviewed by our admin team</li>
-            <li>• An experienced agent will be assigned to help you</li>
-            <li>• The agent will contact you to discuss your travel plans</li>
+            <li>• An experienced tour guide will be assigned to help you</li>
+            <li>• The tour guide will contact you to discuss your travel plans</li>
             <li>• You can track your request status in your dashboard</li>
           </ul>
         </div>

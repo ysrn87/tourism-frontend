@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Meet & Go - Tourism Platform",
-  description: "Connect with travel agents for your dream destination",
+  description: "Connect with travel tour guides for your dream destination",
 };
 
 export default function RootLayout({

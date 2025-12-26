@@ -181,11 +181,11 @@ export default function RequestDetailPage() {
           </div>
         </div>
 
-        {/* Agent Info Card */}
-        {request.agent_name ? (
+        {/* Tour Guide Info Card */}
+        {request.tour_guide_name ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Assigned Agent
+              Assigned Tour Guide
             </h2>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -193,29 +193,29 @@ export default function RequestDetailPage() {
                   <User className="text-blue-600" size={20} />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{request.agent_name}</p>
-                  <p className="text-sm text-gray-500">Travel Agent</p>
+                  <p className="font-medium text-gray-900">{request.tour_guide_name}</p>
+                  <p className="text-sm text-gray-500">Travel Tour Guide</p>
                 </div>
               </div>
-              {request.agent_email && (
+              {request.tour_guide_email && (
                 <div className="flex items-center gap-2 text-gray-600 ml-13">
                   <Mail size={18} />
                   <a 
-                    href={`mailto:${request.agent_email}`}
+                    href={`mailto:${request.tour_guide_email}`}
                     className="text-blue-600 hover:underline"
                   >
-                    {request.agent_email}
+                    {request.tour_guide_email}
                   </a>
                 </div>
               )}
-              {request.agent_phone && (
+              {request.tour_guide_phone && (
                 <div className="flex items-center gap-2 text-gray-600 ml-13">
                   <Phone size={18} />
                   <a 
-                    href={`tel:${request.agent_phone}`}
+                    href={`tel:${request.tour_guide_phone}`}
                     className="text-blue-600 hover:underline"
                   >
-                    {request.agent_phone}
+                    {request.tour_guide_phone}
                   </a>
                 </div>
               )}
@@ -227,10 +227,10 @@ export default function RequestDetailPage() {
               <Clock className="text-yellow-600 shrink-0 mt-1" size={20} />
               <div>
                 <h3 className="text-sm font-semibold text-yellow-900 mb-1">
-                  Waiting for Agent Assignment
+                  Waiting for Tour Guide Assignment
                 </h3>
                 <p className="text-sm text-yellow-800">
-                  Your request is being reviewed by our admin team. An agent will be assigned soon to help you plan your trip.
+                  Your request is being reviewed by our admin team. A tour guide will be assigned soon to help you plan your trip.
                 </p>
               </div>
             </div>
@@ -258,9 +258,9 @@ export default function RequestDetailPage() {
             Request Status Guide
           </h3>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• <strong>Pending:</strong> Waiting for admin review and agent assignment</li>
-            <li>• <strong>Assigned:</strong> An agent has been assigned and will contact you soon</li>
-            <li>• <strong>In Progress:</strong> Agent is working on your travel arrangements</li>
+            <li>• <strong>Pending:</strong> Waiting for admin review and tour guide assignment</li>
+            <li>• <strong>Assigned:</strong> A tour guide has been assigned and will contact you soon</li>
+            <li>• <strong>In Progress:</strong> Tour Guide is working on your travel arrangements</li>
             <li>• <strong>Completed:</strong> Your travel request has been fulfilled</li>
             <li>• <strong>Cancelled:</strong> This request has been cancelled</li>
           </ul>

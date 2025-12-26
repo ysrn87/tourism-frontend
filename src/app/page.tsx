@@ -15,7 +15,7 @@ export default function Home() {
     // Redirect based on role
     if (user.role === 'admin') {
       router.push('/admin/dashboard');
-    } else if (user.role === 'tour_guide') {  // Changed from 'agent'
+    } else if (user.role === 'tour_guide') {  // Changed from 'tour guide'
       router.push('/tour-guide/dashboard');
     } else {
       router.push('/dashboard');
@@ -65,7 +65,7 @@ export default function Home() {
             <span className="text-primary-600"> Awaits</span>
           </h2>
           <p className="text-xl text-gray-600 mb-12">
-            Connect with professional travel agents who will help you plan the perfect journey. 
+            Connect with professional travel tour guides who will help you plan the perfect journey. 
             From exotic beaches to mountain adventures, we've got you covered.
           </p>
           <div className="flex gap-4 justify-center">
@@ -89,7 +89,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Users className="text-primary-600" size={32} />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Expert Agents</h3>
+            <h3 className="text-xl font-semibold mb-2">Expert Tour Guides</h3>
             <p className="text-gray-600">
               Connect with experienced travel professionals who know your destination inside out.
             </p>
@@ -111,7 +111,7 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-semibold mb-2">Secure & Trusted</h3>
             <p className="text-gray-600">
-              Your information is safe with us. All agents are verified professionals.
+              Your information is safe with us. All tour guides are verified professionals.
             </p>
           </div>
         </div>
