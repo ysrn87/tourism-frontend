@@ -36,21 +36,10 @@ export default function AdminPackagesPage() {
     fetchPackages();
   }, []);
 
-//   const fetchPackages = async () => {
-//     try {
-//       setLoading(true);
-//       const response = await api.get('/packages', { params: { active: 'false' } });
-//       setPackages(response.data.packages || []);
-//     } catch (error) {
-//       console.error('Failed to fetch packages:', error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
   const fetchPackages = async () => {
     try {
-      const response = await packageAPI.getAll({ featured: true });
+      setLoading(true);
+      const response = await api.get('/packages', { params: { active: 'false' } });
       setPackages(response.data.packages || []);
     } catch (error) {
       console.error('Failed to fetch packages:', error);
@@ -59,7 +48,7 @@ export default function AdminPackagesPage() {
     }
   };
 
-  const handleToggleFeatured = async (id: number) => {
+    const handleToggleFeatured = async (id: number) => {
     try {
       await api.patch(`/packages/${id}/toggle-featured`);
       fetchPackages();
