@@ -116,6 +116,25 @@ export const adminAPI = {
   
   getDashboardStats: () =>
     api.get('/admin/dashboard/stats'),
+
+  // Tour Packages
+  getAllPackages: (params?: { active?: string; featured?: string }) =>
+    api.get('/packages', { params }),
+  
+  getPackageById: (id: number) =>
+    api.get(`/packages/${id}`),
+  
+  createPackage: (data: any) =>
+    api.post('/packages', data),
+  
+  updatePackage: (id: number, data: any) =>
+    api.put(`/packages/${id}`, data),
+  
+  deletePackage: (id: number) =>
+    api.delete(`/packages/${id}`),
+  
+  togglePackageFeatured: (id: number) =>
+    api.patch(`/packages/${id}/toggle-featured`),
 };
 
 // Package API

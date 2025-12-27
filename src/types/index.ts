@@ -125,12 +125,19 @@ export interface TourPackage {
   departure_days?: string;
   seats_available: number;
   seats_total: number;
-  itinerary?: string[] | any;
-  includes?: string[] | any;
-  excludes?: string[] | any;
-  highlights?: string[] | any;
+  itinerary?: ItineraryDay[];
+  includes?: string[];
+  excludes?: string[];
+  highlights?: string[];
   featured: boolean;
   active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface ItineraryDay {
+  day: number;
+  title: string;
+  description: string;
+  activities?: string[];
 }

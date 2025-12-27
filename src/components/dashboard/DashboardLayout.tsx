@@ -11,7 +11,8 @@ import {
   Menu, 
   X,
   User,
-  Users
+  Users,
+  Package
 } from 'lucide-react';
 import Link from 'next/link';
 
