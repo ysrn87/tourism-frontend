@@ -36,10 +36,21 @@ export default function AdminPackagesPage() {
     fetchPackages();
   }, []);
 
+//   const fetchPackages = async () => {
+//     try {
+//       setLoading(true);
+//       const response = await api.get('/packages', { params: { active: 'false' } });
+//       setPackages(response.data.packages || []);
+//     } catch (error) {
+//       console.error('Failed to fetch packages:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
   const fetchPackages = async () => {
     try {
-      setLoading(true);
-      const response = await api.get('/packages', { params: { active: 'false' } });
+      const response = await packageAPI.getAll({ featured: true });
       setPackages(response.data.packages || []);
     } catch (error) {
       console.error('Failed to fetch packages:', error);

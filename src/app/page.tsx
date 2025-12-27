@@ -29,24 +29,23 @@ export default function Home() {
   const [loadingPackages, setLoadingPackages] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-useEffect(() => {
-  if (!loading && user) {
-    // Redirect based on role
-    if (user.role === 'admin') {
-      router.push('/admin/dashboard');
-    } else if (user.role === 'tour_guide') {  // Changed from 'tour guide'
-      router.push('/tour-guide/dashboard');
-    } else {
-      router.push('/dashboard');
+  useEffect(() => {
+    if (!loading && user) {
+      if (user.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else if (user.role === 'tour_guide') {
+        router.push('/tour-guide/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }
-}, [user, loading, router]);
+  }, [user, loading, router]);
 
-useEffect(() => {
+  useEffect(() => {
     fetchPackages();
   }, []);
 
-const fetchPackages = async () => {
+  const fetchPackages = async () => {
     try {
       const response = await packageAPI.getAll({ featured: true });
       setPackages(response.data.packages || []);
@@ -57,7 +56,7 @@ const fetchPackages = async () => {
     }
   };
 
-const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/packages?search=${encodeURIComponent(searchQuery)}`);
@@ -125,7 +124,7 @@ const handleSearch = (e: React.FormEvent) => {
               <span className="block text-yellow-300">Adventure</span>
             </h2>
             <p className="text-xl md:text-2xl mb-12 text-blue-100">
-              Explore curated tour packages with expert travel agents.
+              Explore curated tour packages with expert travel tour guides.
               Your journey begins here.
             </p>
 
@@ -182,7 +181,7 @@ const handleSearch = (e: React.FormEvent) => {
               Popular Tour Packages
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Handpicked experiences curated by our expert travel agents
+              Handpicked experiences curated by our expert travel tour guides
             </p>
           </div>
 
@@ -245,7 +244,7 @@ const handleSearch = (e: React.FormEvent) => {
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Users className="text-blue-600" size={40} />
               </div>
-              <h3 className="text-2xl font-semibold mb-4">Expert Agents</h3>
+              <h3 className="text-2xl font-semibold mb-4">Expert Tour Guides</h3>
               <p className="text-gray-600 text-lg">
                 Connect with experienced travel professionals who know your destination inside out.
               </p>
@@ -267,7 +266,7 @@ const handleSearch = (e: React.FormEvent) => {
               </div>
               <h3 className="text-2xl font-semibold mb-4">Secure & Trusted</h3>
               <p className="text-gray-600 text-lg">
-                Your information is safe with us. All agents are verified professionals.
+                Your information is safe with us. All tour guides are verified professionals.
               </p>
             </div>
           </div>
