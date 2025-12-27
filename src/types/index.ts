@@ -110,3 +110,27 @@ export interface TourGuideWithWorkload extends User {
   active_requests: number;
   completed_requests: number;
 }
+
+// Tour Package types
+export interface TourPackage {
+  id: number;
+  title: string;
+  slug: string;
+  destination: string;
+  description?: string;
+  image_url?: string;
+  price: number;
+  duration_days: number;
+  duration_nights: number;
+  departure_days?: string;
+  seats_available: number;
+  seats_total: number;
+  itinerary?: string[] | any;
+  includes?: string[] | any;
+  excludes?: string[] | any;
+  highlights?: string[] | any;
+  featured: boolean;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}

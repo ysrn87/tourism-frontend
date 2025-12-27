@@ -117,3 +117,12 @@ export const adminAPI = {
   getDashboardStats: () =>
     api.get('/admin/dashboard/stats'),
 };
+
+// Package API
+export const packageAPI = {
+  getAll: (params?: { featured?: boolean; destination?: string }) =>
+    api.get('/packages', { params }),
+  
+  getBySlug: (slug: string) =>
+    api.get(`/packages/${slug}`),
+};
