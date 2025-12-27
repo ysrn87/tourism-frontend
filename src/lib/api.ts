@@ -137,11 +137,14 @@ export const adminAPI = {
     api.patch(`/packages/${id}/toggle-featured`),
 };
 
-// Package API
-export const packageAPI = {
-  getAll: (params?: { featured?: boolean; destination?: string }) =>
-    api.get('/packages', { params }),
+// Public API (no auth required)
+export const publicAPI = {
+  getFeaturedPackages: () =>
+    api.get('/packages?featured=true&active=true'),
   
-  getBySlug: (slug: string) =>
+  getAllPackages: (params?: { destination?: string }) =>
+    api.get('/packages', { params: { ...params, active: 'true' } }),
+  
+  getPackageBySlug: (slug: string) =>
     api.get(`/packages/${slug}`),
 };
