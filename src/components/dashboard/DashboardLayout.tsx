@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       return [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
         { name: 'Requests', href: '/admin/requests', icon: FileText },
-        { name: 'Tour Guides', href: '/admin/tour-guides', icon: User },
+        { name: 'Tour Guides', href: '/admin/tour-guides', icon: Users },
         { name: 'Tour Packages', href: '/admin/packages', icon: Plane },
       ];
     }
@@ -58,7 +58,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navigation = getNavigation();
 
-   return (
+  return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
