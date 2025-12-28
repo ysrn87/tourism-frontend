@@ -59,8 +59,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return [
       { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
       { name: 'Packages', href: '/packages', icon: FileText },
-      { name: 'My Bookings', href: '/bookings', icon: Calendar},
-      //{ name: 'My Requests', href: '/requests', icon: FileText },
+      //{ name: 'My Bookings', href: '/bookings', icon: Calendar},
+      { name: 'My Requests', href: '/requests', icon: FileText },
 
     ];
   };
