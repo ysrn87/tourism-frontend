@@ -17,14 +17,17 @@ import {
   Package as PackageIcon
 } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function AdminBookingsPage() {
+
+  const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [allRequests, setAllBookings] = useState<Booking[]>([]);
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [allBookings, setAllBookings] = useState<Booking[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'all');
   const [searchQuery, setSearchQuery] = useState('');
-
+  
   useEffect(() => {
     fetchBookings();
   }, [statusFilter]);
@@ -32,9 +35,12 @@ export default function AdminBookingsPage() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
+      const allResponse = await adminAPI.getAllBookings({});
+      setAllBookings(allResponse.data.bookings || allResponse.data);
+
       const params = statusFilter !== 'all' ? { status: statusFilter } : {};
       const response = await adminAPI.getAllBookings(params);
-      setBookings(response.data.bookings);
+      setBookings(response.data.bookings || response.data);
     } catch (error) {
       console.error('Failed to fetch bookings:', error);
     } finally {
