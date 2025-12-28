@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { adminAPI } from '@/lib/api';
-import { Booking } from '@/types';
 import { 
   Calendar,
   Users,
@@ -17,17 +16,13 @@ import {
   Package as PackageIcon
 } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
 export default function AdminBookingsPage() {
-
-  const searchParams = useSearchParams();
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  //const [allBookings, setAllBookings] = useState<Booking[]>([]);
-  const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   useEffect(() => {
     fetchBookings();
   }, [statusFilter]);
@@ -35,12 +30,9 @@ export default function AdminBookingsPage() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const allResponse = await adminAPI.getAllBookings({});
-      setBookings(allResponse.data.bookings || allResponse.data);
-
       const params = statusFilter !== 'all' ? { status: statusFilter } : {};
       const response = await adminAPI.getAllBookings(params);
-      setBookings(response.data.bookings || response.data);
+      setBookings(response.data.bookings);
     } catch (error) {
       console.error('Failed to fetch bookings:', error);
     } finally {
@@ -76,8 +68,8 @@ export default function AdminBookingsPage() {
 
   const filteredBookings = bookings.filter(booking =>
     booking.package_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    booking.user_id ||
-    booking.package_id
+    booking.user_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    booking.contact_name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const stats = {
@@ -86,9 +78,9 @@ export default function AdminBookingsPage() {
     confirmed: bookings.filter(b => b.status === 'confirmed').length,
     completed: bookings.filter(b => b.status === 'completed').length,
     cancelled: bookings.filter(b => b.status === 'cancelled').length,
-    /*revenue: bookings
+    revenue: bookings
       .filter(b => b.status === 'confirmed' || b.status === 'completed')
-      .reduce((sum, b) => sum + parseFloat(b.total_price), 0)*/
+      .reduce((sum, b) => sum + parseFloat(b.total_price), 0)
   };
 
   return (
@@ -128,7 +120,8 @@ export default function AdminBookingsPage() {
           </div>
           <div className="bg-purple-50 rounded-lg border border-purple-200 p-4">
             <p className="text-sm text-purple-700 mb-1">Revenue</p>
-        </div>
+            <p className="text-xl font-bold text-purple-800">${stats.revenue.toFixed(2)}</p>
+          </div>
         </div>
 
         {/* Filters */}
@@ -196,7 +189,7 @@ export default function AdminBookingsPage() {
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
-                      Booking ID: #{booking.id} • Customer: {booking.user_id}
+                      Booking ID: #{booking.id} • Customer: {booking.user_name}
                     </p>
 
                     <div className="grid md:grid-cols-4 gap-4 text-sm">
