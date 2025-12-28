@@ -13,7 +13,8 @@ import {
   User,
   Users,
   Package,
-  Calendar
+  Calendar,
+  ShoppingBag
 } from 'lucide-react';
 import Link from 'next/link';
 

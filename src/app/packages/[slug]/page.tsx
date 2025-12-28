@@ -18,6 +18,8 @@ import {
   Clock
 } from 'lucide-react';
 import Link from 'next/link';
+import { userAPI } from '@/lib/api';
+import Input from '@/components/common/Input';
 
 export default function PackageDetailPage() {
   const params = useParams();
@@ -29,6 +31,14 @@ export default function PackageDetailPage() {
 
   const { user } = useAuth();
   const [showBookingModal, setShowBookingModal] = useState(false);
+
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [bookingData, setBookingData] = useState({
+    departure_date: '',
+    num_travelers: 1,
+    notes: ''
+  });
+  const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {
     fetchPackage();
@@ -46,6 +56,42 @@ export default function PackageDetailPage() {
       setLoading(false);
     }
   };
+
+  const handleBooking = async () => {
+  // Check if user is logged in
+  if (!user) {
+    alert('Please login to book this package');
+    router.push('/login');
+    return;
+  }
+
+  if (!bookingData.departure_date) {
+    alert('Please select a departure date');
+    return;
+  }
+
+  if (!pkg) {
+  console.error("Package is missing");
+  return;
+  }
+
+  setIsBooking(true);
+  try {
+    const response = await userAPI.createBooking({
+      package_id: pkg.id,
+      departure_date: bookingData.departure_date,
+      num_travelers: bookingData.num_travelers,
+      notes: bookingData.notes
+    });
+
+    alert('Booking successful! Redirecting to your bookings...');
+    router.push('/bookings');
+  } catch (error: any) {
+    alert(error.response?.data?.error || 'Failed to create booking');
+  } finally {
+    setIsBooking(false);
+  }
+};
 
   if (loading) {
     return (
@@ -296,25 +342,82 @@ export default function PackageDetailPage() {
               <div className="space-y-3">
                 {pkg.seats_available > 0 ? (
                   <>
-                    {user ? (
-                      <button
-                        onClick={() => setShowBookingModal(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                      >
-                        Book Now
-                      </button>
-                    ) : (
-                      <Link href="/login">
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                          Login to Book
+                    {showBookingForm ? (
+                      <div className="space-y-3">
+                        <Input
+                          label="Departure Date"
+                          type="date"
+                          value={bookingData.departure_date}
+                          onChange={(e) => setBookingData({ ...bookingData, departure_date: e.target.value })}
+                          min={new Date().toISOString().split('T')[0]}
+                          required
+                        />
+                        <Input
+                          label="Number of Travelers"
+                          type="number"
+                          value={bookingData.num_travelers}
+                          onChange={(e) => setBookingData({ ...bookingData, num_travelers: parseInt(e.target.value) })}
+                          min="1"
+                          max={pkg.seats_available}
+                          required
+                        />
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Special Requests (Optional)
+                          </label>
+                          <textarea
+                            value={bookingData.notes}
+                            onChange={(e) => setBookingData({ ...bookingData, notes: e.target.value })}
+                            rows={3}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            placeholder="Any special requirements..."
+                          />
+                        </div>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Price per person:</span>
+                            <span>${pkg.price}</span>
+                          </div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Travelers:</span>
+                            <span>× {bookingData.num_travelers}</span>
+                          </div>
+                          <div className="border-t pt-2 mt-2">
+                            <div className="flex justify-between font-bold">
+                              <span>Total:</span>
+                              <span className="text-blue-600">${pkg.price * bookingData.num_travelers}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={handleBooking}
+                          disabled={isBooking || !bookingData.departure_date}
+                          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                        >
+                          {isBooking ? 'Processing...' : 'Confirm Booking'}
                         </button>
-                      </Link>
+                        <button
+                          onClick={() => setShowBookingForm(false)}
+                          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setShowBookingForm(true)}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                        >
+                          Book Now
+                        </button>
+                        <Link href="/register">
+                          <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">
+                            Request Custom Plan
+                          </button>
+                        </Link>
+                      </>
                     )}
-                    <Link href="/register">
-                      <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">
-                        Request Custom Plan
-                      </button>
-                    </Link>
                   </>
                 ) : (
                   <button
@@ -329,8 +432,8 @@ export default function PackageDetailPage() {
               {/* Booking Modal */}
               {showBookingModal && (
                 <BookingModal
-                  pkg={pkg} 
-                  onClose={() => setShowBookingModal(false)} 
+                  pkg={pkg}
+                  onClose={() => setShowBookingModal(false)}
                 />
               )}
 

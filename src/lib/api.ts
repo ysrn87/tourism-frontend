@@ -68,6 +68,23 @@ export const userAPI = {
   
   getStats: () =>
     api.get('/user/requests/stats'),
+
+  // Bookings
+  createBooking: (data: {
+    package_id: number;
+    departure_date: string;
+    num_travelers: number;
+    notes?: string;
+  }) => api.post('/user/bookings', data),
+  
+  getBookings: (params?: { page?: number; limit?: number }) =>
+    api.get('/user/bookings', { params }),
+  
+  getBookingById: (id: number) =>
+    api.get(`/user/bookings/${id}`),
+  
+  cancelBooking: (id: number) =>
+    api.patch(`/user/bookings/${id}/cancel`),
 };
 
 // Tour Guide API

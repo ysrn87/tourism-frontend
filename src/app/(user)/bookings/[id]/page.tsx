@@ -3,24 +3,20 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import Button from '@/components/common/Button';
-import { bookingAPI } from '@/lib/api';
+import { userAPI } from '@/lib/api';
+import { Booking } from '@/types';
 import { 
   ArrowLeft,
-  MapPin,
-  Calendar,
-  Users,
-  DollarSign,
-  User,
-  Mail,
-  Phone,
-  MessageSquare,
+  MapPin, 
+  Calendar, 
+  Users, 
   CheckCircle,
   XCircle,
   Clock,
-  Package
+  DollarSign
 } from 'lucide-react';
 import Link from 'next/link';
+import Button from '@/components/common/Button';
 
 export default function BookingDetailPage() {
   const params = useParams();
@@ -37,7 +33,7 @@ export default function BookingDetailPage() {
 
   const fetchBooking = async () => {
     try {
-      const response = await bookingAPI.getBookingById(bookingId);
+      const response = await userAPI.getBookingById(bookingId);
       setBooking(response.data);
     } catch (error) {
       console.error('Failed to fetch booking:', error);
@@ -49,15 +45,13 @@ export default function BookingDetailPage() {
   };
 
   const handleCancel = async () => {
-    if (!confirm('Are you sure you want to cancel this booking? Your seats will be returned to availability.')) {
-      return;
-    }
+    if (!confirm('Are you sure you want to cancel this booking?')) return;
 
     setCancelling(true);
     try {
-      await bookingAPI.cancelBooking(bookingId);
-      alert('Booking cancelled successfully!');
-      fetchBooking(); // Refresh
+      await userAPI.cancelBooking(bookingId);
+      alert('Booking cancelled successfully');
+      router.push('/bookings');
     } catch (error: any) {
       alert(error.response?.data?.error || 'Failed to cancel booking');
     } finally {
@@ -75,14 +69,10 @@ export default function BookingDetailPage() {
     }
   };
 
-  const formatStatus = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center py-12">
+        <div className="flex justify-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </DashboardLayout>
@@ -94,75 +84,63 @@ export default function BookingDetailPage() {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <Link 
             href="/bookings" 
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft size={20} />
-            Back to My Bookings
+            Back to Bookings
           </Link>
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Booking Details
               </h1>
-              <p className="text-gray-600">
-                Booking ID: #{booking.id}
-              </p>
+              <p className="text-gray-600">Booking ID: #{booking.id}</p>
             </div>
             <span className={`px-4 py-2 rounded-full text-sm font-medium border ${getStatusColor(booking.status)}`}>
-              {formatStatus(booking.status)}
+              {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
             </span>
           </div>
         </div>
 
-        {/* Package Info Card */}
+        {/* Package Info */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Package Information
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Package Information</h2>
           <div className="flex gap-4">
-            {booking.image_url && (
-              <div className="w-32 h-32 rounded-lg overflow-hidden shrink-0">
-                <img
-                  src={booking.image_url}
-                  alt={booking.package_title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            {booking.package_image_url && (
+              <img
+                src={booking.package_image_url}
+                alt={booking.package_title}
+                className="w-32 h-32 object-cover rounded-lg"
+              />
             )}
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
                 {booking.package_title}
               </h3>
-              <div className="flex items-center gap-2 text-gray-600 mb-3">
-                <MapPin size={18} />
-                <span>{booking.destination}</span>
+              <div className="flex items-center gap-2 text-gray-600 mb-2">
+                <MapPin size={16} />
+                <span>{booking.package_destination}</span>
               </div>
-              <div className="flex items-center gap-4 text-sm text-gray-700">
-                <div className="flex items-center gap-1">
-                  <Calendar size={16} className="text-blue-600" />
-                  <span>{booking.duration_days}D/{booking.duration_nights}N</span>
-                </div>
-              </div>
+              <p className="text-sm text-gray-600">
+                {booking.package_duration_days}D/{booking.package_duration_nights}N
+              </p>
             </div>
           </div>
         </div>
 
         {/* Booking Details */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Booking Details
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <div className="flex items-center gap-2 text-gray-600 mb-2">
                 <Calendar size={20} />
                 <span className="text-sm font-medium">Departure Date</span>
               </div>
-              <p className="text-lg font-semibold text-gray-900 ml-7">
+              <p className="text-lg font-semibold ml-7">
                 {new Date(booking.departure_date).toLocaleDateString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
@@ -171,94 +149,53 @@ export default function BookingDetailPage() {
                 })}
               </p>
             </div>
-
             <div>
               <div className="flex items-center gap-2 text-gray-600 mb-2">
                 <Users size={20} />
                 <span className="text-sm font-medium">Number of Travelers</span>
               </div>
-              <p className="text-lg font-semibold text-gray-900 ml-7">
-                {booking.num_travelers} {booking.num_travelers === 1 ? 'Person' : 'People'}
+              <p className="text-lg font-semibold ml-7">
+                {booking.num_travelers} person(s)
               </p>
             </div>
-
             <div>
               <div className="flex items-center gap-2 text-gray-600 mb-2">
                 <DollarSign size={20} />
                 <span className="text-sm font-medium">Total Price</span>
               </div>
-              <p className="text-lg font-semibold text-green-600 ml-7">
+              <p className="text-2xl font-bold text-blue-600 ml-7">
                 ${booking.total_price}
               </p>
             </div>
-
             <div>
               <div className="flex items-center gap-2 text-gray-600 mb-2">
                 <Clock size={20} />
                 <span className="text-sm font-medium">Booked On</span>
               </div>
-              <p className="text-lg font-semibold text-gray-900 ml-7">
+              <p className="text-lg font-semibold ml-7">
                 {new Date(booking.created_at).toLocaleDateString()}
               </p>
             </div>
           </div>
-        </div>
 
-        {/* Contact Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Contact Information
-          </h2>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <User className="text-gray-400" size={20} />
-              <div>
-                <p className="text-sm text-gray-600">Contact Name</p>
-                <p className="font-medium text-gray-900">{booking.contact_name}</p>
-              </div>
+          {booking.notes && (
+            <div className="mt-6 pt-6 border-t">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">
+                Special Requests
+              </h3>
+              <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">
+                {booking.notes}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
-              <Mail className="text-gray-400" size={20} />
-              <div>
-                <p className="text-sm text-gray-600">Email</p>
-                <a href={`mailto:${booking.contact_email}`} className="font-medium text-blue-600 hover:underline">
-                  {booking.contact_email}
-                </a>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Phone className="text-gray-400" size={20} />
-              <div>
-                <p className="text-sm text-gray-600">Phone</p>
-                <a href={`tel:${booking.contact_phone}`} className="font-medium text-blue-600 hover:underline">
-                  {booking.contact_phone}
-                </a>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-
-        {/* Special Requests */}
-        {booking.special_requests && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <div className="flex items-center gap-2 text-gray-900 mb-3">
-              <MessageSquare size={20} />
-              <h2 className="text-xl font-semibold">Special Requests</h2>
-            </div>
-            <p className="text-gray-700 whitespace-pre-wrap">
-              {booking.special_requests}
-            </p>
-          </div>
-        )}
 
         {/* What's Included */}
-        {booking.includes && booking.includes.length > 0 && (
+        {booking.package_includes && booking.package_includes.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              What's Included in Your Package
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">What's Included</h2>
             <div className="space-y-2">
-              {booking.includes.map((item: string, index: number) => (
+              {booking.package_includes.map((item: string, index: number) => (
                 <div key={index} className="flex items-start gap-3">
                   <CheckCircle className="text-green-600 shrink-0 mt-0.5" size={18} />
                   <span className="text-gray-700">{item}</span>
@@ -269,14 +206,8 @@ export default function BookingDetailPage() {
         )}
 
         {/* Actions */}
-        {booking.status === 'pending' && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Manage Booking
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Your booking is pending confirmation. You can cancel it if your plans change.
-            </p>
+        {(booking.status === 'pending' || booking.status === 'confirmed') && (
+          <div className="flex gap-4">
             <Button
               variant="danger"
               onClick={handleCancel}
@@ -289,35 +220,11 @@ export default function BookingDetailPage() {
           </div>
         )}
 
-        {booking.status === 'confirmed' && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle className="text-green-600 shrink-0 mt-1" size={24} />
-              <div>
-                <h3 className="text-lg font-semibold text-green-900 mb-1">
-                  Booking Confirmed!
-                </h3>
-                <p className="text-sm text-green-800">
-                  Your booking has been confirmed. You will receive further details via email. Have a great trip!
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {booking.status === 'cancelled' && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <div className="flex items-start gap-3">
-              <XCircle className="text-red-600 shrink-0 mt-1" size={24} />
-              <div>
-                <h3 className="text-lg font-semibold text-red-900 mb-1">
-                  Booking Cancelled
-                </h3>
-                <p className="text-sm text-red-800">
-                  This booking has been cancelled. The seats have been returned to availability.
-                </p>
-              </div>
-            </div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-800">
+              This booking has been cancelled. Your seats have been released back to the package.
+            </p>
           </div>
         )}
       </div>

@@ -166,3 +166,22 @@ export interface TourBooking {
   user_name?: string;
   user_email?: string;
 }
+
+// Booking types
+export interface Booking {
+  id: number;
+  package_id: number;
+  user_id: number;
+  departure_date: string;
+  num_travelers: number;
+  total_price: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+  // Joined data
+  package_title?: string;
+  package_destination?: string;
+  package_duration_days?: number;
+  package_image_url?: string;
+}
