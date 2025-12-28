@@ -48,16 +48,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     if (user?.role === 'admin') {
       return [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-        { name: 'Requests', href: '/admin/requests', icon: FileText },
         { name: 'Tour Guides', href: '/admin/tour-guides', icon: Users },
         { name: 'Tour Packages', href: '/admin/packages', icon: Plane },
         { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
+        { name: 'Requests', href: '/admin/requests', icon: FileText },
       ];
     }
     // Default for regular users
     return [
       { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-      { name: 'My Requests', href: '/requests', icon: FileText },
+      { name: 'Packages', href: '/packages', icon: FileText },
+      { name: 'My Bookings', href: '/bookings', icon: Calendar},
+      //{ name: 'My Requests', href: '/requests', icon: FileText },
+
     ];
   };
 
