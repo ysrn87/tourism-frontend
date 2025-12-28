@@ -12,9 +12,12 @@ import {
   X,
   User,
   Users,
-  Package
+  Package,
+  Calendar
 } from 'lucide-react';
 import Link from 'next/link';
+
+
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -48,6 +51,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         { name: 'Requests', href: '/admin/requests', icon: FileText },
         { name: 'Tour Guides', href: '/admin/tour-guides', icon: Users },
         { name: 'Tour Packages', href: '/admin/packages', icon: Plane },
+        { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
       ];
     }
     // Default for regular users

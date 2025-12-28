@@ -141,3 +141,28 @@ export interface ItineraryDay {
   description: string;
   activities?: string[];
 }
+
+// Tour Booking types
+export interface TourBooking {
+  id: number;
+  package_id: number;
+  user_id: number;
+  departure_date: string;
+  num_travelers: number;
+  total_price: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  special_requests?: string;
+  created_at: string;
+  updated_at: string;
+  // Joined fields
+  package_title?: string;
+  destination?: string;
+  duration_days?: number;
+  duration_nights?: number;
+  image_url?: string;
+  user_name?: string;
+  user_email?: string;
+}

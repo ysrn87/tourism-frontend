@@ -135,6 +135,14 @@ export const adminAPI = {
   
   togglePackageFeatured: (id: number) =>
     api.patch(`/packages/${id}/toggle-featured`),
+
+  // Bookings
+  getAllBookings: (params?: { status?: string }) =>
+    api.get('/bookings/admin/all', { params }),
+  
+  updateBookingStatus: (id: number, status: string) =>
+    api.patch(`/bookings/${id}/status`, { status }),
+  
 };
 
 // Public API (no auth required)
@@ -147,4 +155,18 @@ export const publicAPI = {
   
   getPackageBySlug: (slug: string) =>
     api.get(`/packages/${slug}`),
+};
+
+export const bookingAPI = {
+  createBooking: (data: any) =>
+    api.post('/bookings', data),
+  
+  getMyBookings: () =>
+    api.get('/bookings/my-bookings'),
+  
+  getBookingById: (id: number) =>
+    api.get(`/bookings/${id}`),
+  
+  cancelBooking: (id: number) =>
+    api.patch(`/bookings/${id}/cancel`),
 };

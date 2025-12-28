@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import BookingModal from '@/components/bookings/BookingModal';
+import { useAuth } from '@/context/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
 import { publicAPI } from '@/lib/api';
 import { TourPackage } from '@/types';
-import { 
+import {
   ArrowLeft,
-  MapPin, 
-  Calendar, 
-  Users, 
+  MapPin,
+  Calendar,
+  Users,
   DollarSign,
   CheckCircle,
   XCircle,
@@ -24,6 +26,9 @@ export default function PackageDetailPage() {
 
   const [pkg, setPkg] = useState<TourPackage | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { user } = useAuth();
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   useEffect(() => {
     fetchPackage();
@@ -66,8 +71,8 @@ export default function PackageDetailPage() {
 
       {/* Back Button */}
       <div className="container mx-auto px-4 py-6">
-        <Link 
-          href="/packages" 
+        <Link
+          href="/packages"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft size={20} />
@@ -269,20 +274,19 @@ export default function PackageDetailPage() {
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Availability</span>
-                  <span className={`text-sm font-semibold ${
-                    pkg.seats_available > 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {pkg.seats_available > 0 
-                      ? `${pkg.seats_available} seats left` 
+                  <span className={`text-sm font-semibold ${pkg.seats_available > 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                    {pkg.seats_available > 0
+                      ? `${pkg.seats_available} seats left`
                       : 'Sold Out'
                     }
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-blue-600 h-2 rounded-full transition-all"
-                    style={{ 
-                      width: `${(pkg.seats_available / pkg.seats_total) * 100}%` 
+                    style={{
+                      width: `${(pkg.seats_available / pkg.seats_total) * 100}%`
                     }}
                   ></div>
                 </div>
@@ -292,11 +296,20 @@ export default function PackageDetailPage() {
               <div className="space-y-3">
                 {pkg.seats_available > 0 ? (
                   <>
-                    <Link href="/register">
-                      <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    {user ? (
+                      <button
+                        onClick={() => setShowBookingModal(true)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                      >
                         Book Now
                       </button>
-                    </Link>
+                    ) : (
+                      <Link href="/login">
+                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                          Login to Book
+                        </button>
+                      </Link>
+                    )}
                     <Link href="/register">
                       <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">
                         Request Custom Plan
@@ -304,14 +317,22 @@ export default function PackageDetailPage() {
                     </Link>
                   </>
                 ) : (
-                  <button 
-                    disabled 
+                  <button
+                    disabled
                     className="w-full bg-gray-300 text-gray-500 font-semibold py-3 px-6 rounded-lg cursor-not-allowed"
                   >
                     Sold Out
                   </button>
                 )}
               </div>
+
+              {/* Booking Modal */}
+              {showBookingModal && (
+                <BookingModal
+                  pkg={pkg} 
+                  onClose={() => setShowBookingModal(false)} 
+                />
+              )}
 
               {/* Info */}
               <div className="mt-6 pt-6 border-t border-gray-200">
