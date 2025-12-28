@@ -24,7 +24,7 @@ export default function AdminBookingsPage() {
   const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [allBookings, setAllBookings] = useState<Booking[]>([]);
+  //const [allBookings, setAllBookings] = useState<Booking[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'all');
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -36,7 +36,7 @@ export default function AdminBookingsPage() {
     try {
       setLoading(true);
       const allResponse = await adminAPI.getAllBookings({});
-      setAllBookings(allResponse.data.bookings || allResponse.data);
+      setBookings(allResponse.data.bookings || allResponse.data);
 
       const params = statusFilter !== 'all' ? { status: statusFilter } : {};
       const response = await adminAPI.getAllBookings(params);

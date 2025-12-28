@@ -155,10 +155,10 @@ export const adminAPI = {
 
   // Bookings
   getAllBookings: (params?: { status?: string }) =>
-    api.get('/bookings/admin/all', { params }),
+    api.get('/admin/bookings', { params }),
   
   updateBookingStatus: (id: number, status: string) =>
-    api.patch(`/bookings/${id}/status`, { status }),
+    api.patch(`admin/bookings/${id}/status`, { status }),
   
 };
 
