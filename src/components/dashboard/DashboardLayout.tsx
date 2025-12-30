@@ -87,7 +87,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Logo */}
           <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-200">
             <Plane className="text-blue-600" size={28} />
-            <span className="text-xl font-bold text-gray-900">Meet & Go</span>
+            <span className="text-xl font-bold text-gray-900">meetandgo</span>
           </div>
 
           {/* User Info */}
@@ -151,7 +151,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </button>
             <div className="flex items-center gap-2">
               <Plane className="text-blue-600" size={24} />
-              <span className="text-lg font-bold text-gray-900">Meet & Go</span>
+              <span className="text-lg font-bold text-gray-900">meetandgo</span>
             </div>
             <div className="w-6"></div>
           </div>
